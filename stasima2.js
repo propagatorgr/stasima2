@@ -45,11 +45,11 @@ function setup() {
     windowWidth,
     getViewportHeight() - CONTROL_BAR_HEIGHT
   );
-  canvas.parent('stasima-holder');
+  canvas.parent('stasima2-holder');
 
   // ---------- Control Bar ----------
   controlBar = createDiv();
-  controlBar.parent('stasima-holder');
+  controlBar.parent('stasima2-holder');
   controlBar.style('position', 'fixed');
   controlBar.style('left', '0');
   controlBar.style('bottom', '0');
