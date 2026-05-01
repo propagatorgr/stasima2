@@ -1,5 +1,9 @@
-// Στάσιμο κύμα με ΚΟΙΛΙΑ στο x=0 και ΔΕΣΜΟ στο x=L
-// Τελική έκδοση – ίδιο UI / ίδια εμπειρία χρήστη
+// =====================================================
+// Στάσιμο κύμα σε χορδή
+// Κοιλία στο x = 0 – Δεσμός στο x = L
+// Με διακόπτη Slow Motion
+// =====================================================
+
 
 // =====================================================
 // VIEWPORT
@@ -14,13 +18,14 @@ function getViewportHeight() {
 // ΣΤΑΘΕΡΕΣ UI
 // =====================================================
 const CONTROL_BAR_HEIGHT = 160;
+const BASE_DT = 0.02;   // βασικό χρονικό βήμα
 
 // =====================================================
 // ΦΥΣΙΚΕΣ ΠΑΡΑΜΕΤΡΟΙ
 // =====================================================
-const L = 0.65;   // μήκος χορδής (m)
-let u = 120;      // ταχύτητα διάδοσης (m/s)
-let A = 60;       // πλάτος σχεδίασης (px)
+const L = 0.65;   // m
+let u = 120;      // m/s
+let A = 60;       // px
 
 // =====================================================
 // CANVAS
@@ -29,10 +34,11 @@ let L_draw = 600;
 let scale;
 
 // =====================================================
-// ΧΕΙΡΙΣΤΗΡΙΑ
+// UI
 // =====================================================
-let nSlider, uSlider, soundToggle;
-let controlBar, nBlock, uBlock, soundBlock;
+let nSlider, uSlider;
+let soundToggle, slowToggle;
+let controlBar, nBlock, uBlock, soundBlock, slowBlock;
 
 // =====================================================
 // ΗΧΟΣ
@@ -40,6 +46,10 @@ let controlBar, nBlock, uBlock, soundBlock;
 let osc;
 let t = 0;
 
+
+// =====================================================
+// SETUP
+// =====================================================
 function setup() {
 
   const canvas = createCanvas(
@@ -48,7 +58,7 @@ function setup() {
   );
   canvas.parent('stasima2-holder');
 
-  // ---------- Control Bar ----------
+  // ---------- Control bar ----------
   controlBar = createDiv();
   controlBar.parent('stasima2-holder');
   controlBar.style('position', 'fixed');
@@ -90,14 +100,20 @@ function setup() {
   soundBlock.parent(controlBar);
   soundBlock.style('text-align', 'center');
   soundBlock.html('Ήχος<br>');
-
   soundToggle = createCheckbox(' Ενεργοποίηση', false);
   soundToggle.parent(soundBlock);
-  soundToggle.style('cursor', 'pointer');
 
   soundToggle.changed(() => {
     if (soundToggle.checked()) userStartAudio();
   });
+
+  // ---------- Slow Motion ----------
+  slowBlock = createDiv();
+  slowBlock.parent(controlBar);
+  slowBlock.style('text-align', 'center');
+  slowBlock.html('Slow motion<br>');
+  slowToggle = createCheckbox(' Ενεργοποίηση', true);
+  slowToggle.parent(slowBlock);
 
   // ---------- Oscillator ----------
   osc = new p5.Oscillator('sine');
@@ -106,6 +122,9 @@ function setup() {
 }
 
 
+// =====================================================
+// RESIZE
+// =====================================================
 function windowResized() {
   resizeCanvas(
     windowWidth,
@@ -113,7 +132,12 @@ function windowResized() {
   );
 }
 
+
+// =====================================================
+// DRAW
+// =====================================================
 function draw() {
+
   background(0);
 
   const N = nSlider.value();
@@ -139,7 +163,7 @@ function draw() {
   push();
   translate((width - L * scale) / 2, stringY);
 
-  // άξονας ισορροπίας
+  // γραμμή ισορροπίας
   stroke(200);
   line(0, 0, L * scale, 0);
 
@@ -147,7 +171,7 @@ function draw() {
   stroke(0, 170, 255);
   noFill();
   beginShape();
-  for (let x = 0; x <= L * scale; x += 2) {
+  for (let x = 0; x <= L * scale; x += 1) {
     const x_phys = x / scale;
     const y =
       2 * A *
@@ -172,10 +196,19 @@ function draw() {
   const infoY = height * 0.62;
 
   text('Χορδή με κοιλία στο x = 0 και δεσμό στο x = L', width / 2, infoY - 60);
-  text(`N = ${N}  →  αρμονική ${(2 * N + 1)}`, width / 2, infoY - 35);
+  text(`N = ${N}  →  αρμονική ${2 * N + 1}`, width / 2, infoY - 35);
   text(`u = ${u} m/s`, width / 2, infoY - 10);
   text(`f = ${f.toFixed(1)} Hz   |   λ = ${lambda.toFixed(2)} m`, width / 2, infoY + 15);
   text('Τύπος: fₙ = (2N+1)·u / (4·L)', width / 2, infoY + 40);
 
-  t += 0.02;
+  if (slowToggle.checked()) {
+    text('Slow motion ενεργό', width / 2, infoY + 65);
+  }
+
+  // ---------- Χρόνος ----------
+  let dt = BASE_DT;
+  if (slowToggle.checked()) {
+    dt = BASE_DT / (N + 1);
+  }
+  t += dt;
 }
