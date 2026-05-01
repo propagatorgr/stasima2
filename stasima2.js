@@ -205,6 +205,16 @@ function draw() {
     text('Slow motion ενεργό', width / 2, infoY + 65);
   }
 
+  
+if (!slowToggle.checked()) {
+  text(
+    'Γρήγορη ταλάντωση – φαίνεται στιγμιότυπο',
+    width / 2,
+    infoY + 85
+  );
+}
+
+
   // ---------- Χρόνος ----------
   let dt = BASE_DT;
   if (slowToggle.checked()) {
