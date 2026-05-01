@@ -41,6 +41,7 @@ let osc;
 let t = 0;
 
 function setup() {
+
   const canvas = createCanvas(
     windowWidth,
     getViewportHeight() - CONTROL_BAR_HEIGHT
@@ -89,10 +90,11 @@ function setup() {
   soundBlock.parent(controlBar);
   soundBlock.style('text-align', 'center');
   soundBlock.html('Ήχος<br>');
+
+  // ✅ ΜΙΑ ΦΟΡΑ μόνο
   soundToggle = createCheckbox(' Ενεργοποίηση', false);
-  soundToggle = createCheckbox(' Ενεργοποίηση', false);
-soundToggle.parent(soundBlock);
-soundToggle.style('position', 'static');
+  soundToggle.parent(soundBlock);
+  soundToggle.style('cursor', 'pointer');
 
   soundToggle.changed(() => {
     if (soundToggle.checked()) userStartAudio();
@@ -103,6 +105,7 @@ soundToggle.style('position', 'static');
   osc.start();
   osc.amp(0);
 }
+
 
 function windowResized() {
   resizeCanvas(
