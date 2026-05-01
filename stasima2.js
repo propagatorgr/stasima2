@@ -90,7 +90,9 @@ function setup() {
   soundBlock.style('text-align', 'center');
   soundBlock.html('Ήχος<br>');
   soundToggle = createCheckbox(' Ενεργοποίηση', false);
-  soundToggle.parent(soundBlock);
+  soundToggle = createCheckbox(' Ενεργοποίηση', false);
+soundToggle.parent(soundBlock);
+soundToggle.style('position', 'static');
 
   soundToggle.changed(() => {
     if (soundToggle.checked()) userStartAudio();
