@@ -206,7 +206,7 @@ function draw() {
   }
 
   
-if (!slowToggle.checked()) {
+if (!slowToggle.checked() && N >= 4) {
   text(
     'Γρήγορη ταλάντωση – φαίνεται στιγμιότυπο',
     width / 2,
