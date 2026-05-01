@@ -91,7 +91,6 @@ function setup() {
   soundBlock.style('text-align', 'center');
   soundBlock.html('Ήχος<br>');
 
-  // ✅ ΜΙΑ ΦΟΡΑ μόνο
   soundToggle = createCheckbox(' Ενεργοποίηση', false);
   soundToggle.parent(soundBlock);
   soundToggle.style('cursor', 'pointer');
