@@ -196,7 +196,14 @@ function draw() {
   const infoY = height * 0.62;
 
   text('Χορδή με κοιλία στο x = 0 και δεσμό στο x = L', width / 2, infoY - 60);
-  text(`N = ${N}  →  αρμονική ${2 * N + 1}`, width / 2, infoY - 35);
+ let harmonicText;
+if (N === 0) {
+  harmonicText = 'Θεμελιώδης';
+} else {
+  harmonicText = `${N}η αρμονική`;
+}
+
+text(`N = ${N} → ${harmonicText} ( ${2 * N + 1}η ιδιομορφή )`, width / 2, infoY - 35);
   text(`u = ${u} m/s`, width / 2, infoY - 10);
   text(`f = ${f.toFixed(1)} Hz   |   λ = ${lambda.toFixed(2)} m`, width / 2, infoY + 15);
   text('Τύπος: fₙ = (2N+1)·u / (4·L)', width / 2, infoY + 40);
